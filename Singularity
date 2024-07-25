@@ -1,9 +1,8 @@
 Bootstrap: docker
 From: ubuntu:xenial
 
-%setup
-REPO_ROOT=`dirname $SINGULARITY_BUILDDEF`
-cp -r $REPO_ROOT/ $SINGULARITY_ROOTFS/planner
+%files
+planner/popf/popf3-clp /
 
 %post
 apt-get update
@@ -13,10 +12,10 @@ apt-get -y install g++ make flex bison cmake doxygen coinor-clp coinor-libcbc-de
 DOMAINFILE=$1
 PROBLEMFILE=$2
 PLANFILE=$3
-/planner/planner/popf/popf3-clp $DOMAINFILE $PROBLEMFILE > $PLANFILE
+exec /popf3-clp $DOMAINFILE $PROBLEMFILE > $PLANFILE
 
 %test
-/planner/planner/popf/popf3-clp
+exec /popf3-clp
 
 %labels
 Name        popcorn-base
